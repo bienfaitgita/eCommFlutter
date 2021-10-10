@@ -1,29 +1,44 @@
-import 'package:flutter/gestures.dart';
+import 'package:e_commerce/screens/widgets/changescreen.dart';
+import 'package:e_commerce/screens/widgets/mybutton.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:e_commerce/screens/login.dart';
+//import 'package:flutter/services.dart';
 
 const MyBlue = Color(0xFF92b1bf);
 const MyYellow = Color(0xFFf7f2db);
 
 class SignUp extends StatefulWidget {
-  //const SignUp({Key? key}) : super(key: key);
-
+  
+  // Function? onChanged;
+  // SignUp({this.onChanged});
   @override
   _SignUpState createState() => _SignUpState();
 }
 
-late final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 String p =
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
-late RegExp regExp = new RegExp(p);
-bool ObscurText = true;
+RegExp regExp = new RegExp(p);
+bool obscurText = true;
 
 class _SignUpState extends State<SignUp> {
+  //late final String email;
+  //late final String password;
+
   void validation() {
-    final FormState? _form = _FormKey.currentState;
+    final FormState? _form = _formKey.currentState;
 
     if (_form!.validate()) {
-      print("Yes");
+      // try {
+      //   UserCredential result = await FirebaseAuth.instance
+      //       .createUserWithEmailAndPassword(email: email, password: password);
+      //   print(result.user!.uid);
+      // } on PlatformException catch (e) {
+      //   print(e.message.toString());
+      // }
     } else {
       print("No");
     }
@@ -35,7 +50,7 @@ class _SignUpState extends State<SignUp> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Form(
-            key: _FormKey,
+            key: _formKey,
             child: Container(
               child: Column(
                 children: [
@@ -73,7 +88,7 @@ class _SignUpState extends State<SignUp> {
                             return "";
                           },
                           style: TextStyle(
-                            color: MyBlue,
+                            color: Colors.black,
                           ),
                           decoration: InputDecoration(
                               hintText: "UserName",
@@ -81,6 +96,12 @@ class _SignUpState extends State<SignUp> {
                               border: OutlineInputBorder()),
                         ),
                         TextFormField(
+                          // onChanged: (value) {
+                          //   setState(() {
+                          //     email = value;
+                          //     print(email);
+                          //   });
+                          // },
                           validator: (value) {
                             if (value == "") {
                               return "Please Fill email";
@@ -98,7 +119,7 @@ class _SignUpState extends State<SignUp> {
                               border: OutlineInputBorder()),
                         ),
                         TextFormField(
-                          obscureText: ObscurText,
+                          obscureText: obscurText,
                           validator: (value) {
                             if (value == "") {
                               return "Please Fill password";
@@ -116,17 +137,24 @@ class _SignUpState extends State<SignUp> {
                                 onTap: () {
                                   FocusScope.of(context).unfocus();
                                   setState(() {
-                                    ObscurText = !ObscurText;
-                                    
+                                    obscurText = !obscurText;
                                   });
                                 },
                                 child: Icon(
-                                 ObscurText==true?Icons.visibility:Icons.visibility_off,
+                                  obscurText == true
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                   color: MyBlue,
                                 ),
                               ),
                               hintStyle: TextStyle(color: MyBlue),
                               border: OutlineInputBorder()),
+                          // onChanged: (value) {
+                          //   setState(() {
+                          //     password = value;
+                          //     print(password);
+                          //   });
+                          // },
                         ),
                         TextFormField(
                           validator: (value) {
@@ -138,7 +166,7 @@ class _SignUpState extends State<SignUp> {
                             return "";
                           },
                           style: TextStyle(
-                            color: MyYellow,
+                            color: Colors.black,
                           ),
                           decoration: InputDecoration(
                               hintText: "Numéro de téléphone",
@@ -146,33 +174,24 @@ class _SignUpState extends State<SignUp> {
                               hintStyle: TextStyle(color: MyBlue),
                               border: OutlineInputBorder()),
                         ),
-                        Container(
-                          height: 45,
-                          width: double.infinity,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                validation();
-                              },
-                              child: Text(
-                                "Register",
-                                style: TextStyle(color: MyYellow),
-                              )),
+                        MyButton(
+                          onPressed: () {
+                            validation();
+                          },
+                          name: "SignUp",
                         ),
-                        Row(
-                          children: [
-                            Text("I Have Already an Account!"),
-                            SizedBox(width: 10),
-                            GestureDetector(
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                  color: MyBlue,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        ChangeScreen(
+                          name: "Login",
+                          whichAccount: "I Have Already an Account!",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Login(),
                               ),
-                            )
-                          ],
-                        )
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
